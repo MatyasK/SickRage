@@ -70,7 +70,7 @@ module.exports = function(grunt) {
         'exec:git:merge:develop', // Merge develop into master
         'exec:git_get_last_tag', 'exec:git_list_changes', // List changes from since last tag
         '_get_next_tag', 'exec:git_tag_new', // Create new release tag
-        'exec:git_push:origin:master:tags', // Push master + tags
+        'exec:git_push:origin:master:nextTag', // Push master + most recent tag
         'exec:git:checkout:develop' // Go back to develop
     ]);
 
@@ -347,7 +347,10 @@ module.exports = function(grunt) {
             'git_push': {
                 cmd: function (remote, branch, tags) {
                     var pushCmd = 'git push ' + remote + ' ' + branch;
-                    if (tags) {
+                    if (tags === 'nextTag') {
+                        grunt.config.requires('next_tag');
+                        pushCmd += ' ' + grunt.config('next_tag');
+                    } else if (tags) {
                         pushCmd += ' --tags';
                     }
                     if (grunt.option('no-push')) {
