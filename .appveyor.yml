@@ -66,7 +66,7 @@ install:
   - npm -g install npm
   - npm -g install bower
   - npm -g install grunt-cli
-  - npm rebuild # need to do this only once, I think
+  # - npm rebuild # need to do this when downgrading from node v7
   - npm install
   - bower install
 
