@@ -66,15 +66,16 @@ install:
   - npm -g install npm
   - npm -g install bower
   - npm -g install grunt-cli
+  - npm rebuild # need to do this only once, I think
   - npm install
   - bower install
+
+before_test:
+  - echo Starting Tests
 
 test_script:
   - grunt travis
   - tox -v --recreate
-
-before_test:
-  - echo Starting Tests
 
 after_test:
   - echo Finished Tests
