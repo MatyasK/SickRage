@@ -16,11 +16,10 @@ cache:
     - node_modules
 
 before_install:
-  # Origin: https://github.com/htgoebel/pyinstaller/commit/a19a8855953ee27b855e9a6abaf9aa402bdd3358
   # Skip build if the commit message contains [skip travis] or [travis skip]
-  # - echo "$TRAVIS_COMMIT_MESSAGE" | grep -E '\[(skip travis|travis skip)\]' && echo "[skip travis] has been found, exiting." && exit 0
-  - SKIP_BUILD=$(echo "$TRAVIS_COMMIT_MESSAGE" | grep -oE '\[(skip travis|travis skip)\]') &&
-    if [[ ! -z $SKIP_BUILD ]]; then echo "$SKIP_BUILD was found in commit message, skipping."; exit 0; fi;
+  - >
+      SKIP_BUILD=$(echo "$TRAVIS_COMMIT_MESSAGE" | grep -oE '\[(skip travis|travis skip)\]');
+      if [[ ! -z $SKIP_BUILD ]]; then echo "$SKIP_BUILD was found in commit message, skipping."; exit 0; fi;
   - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm &&
     git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
   - npm install -g grunt-cli
