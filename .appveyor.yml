@@ -1,8 +1,8 @@
 # Keep this for future reference: https://github.com/ogrisel/python-appveyor-demo
 environment:
-  global:
-    PYTHON: "C:\\Python27" # currently 2.7.13
-    NODEJS_VERSION: "6.10" # the current LTS version
+  matrix:
+    - PYTHON: "C:\\Python27" # currently 2.7.13
+      NODEJS_VERSION: "6.10" # the current LTS version
 
 platform:
   - x64
@@ -37,14 +37,10 @@ install:
         Where-Object pullRequestId -eq $env:APPVEYOR_PULL_REQUEST_NUMBER)[0].buildNumber) { `
           throw "There are newer queued builds for this pull request, failing early." }
 
-  # Install Python (from the official .msi of http://python.org) and pip
-  # - ps: if (-not(Test-Path($env:PYTHON))) { & appveyor\install.ps1 }
-
-  # Make sure to use the correct Python version.
-  # Prepend Python to the PATH of this build (this cannot be done from inside
-  # the powershell script as it would require to restart the parent CMD process).
-  - "echo %PLATFORM%"
-  - "IF %PLATFORM% == x64 ( SET \"PATH=%PYTHON%-x64;%PYTHON%-x64\\Scripts;%PATH%\" ) else ( SET \"PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%\" )"
+  # Prepend Python to the PATH of this build
+  # (this cannot be done from inside the powershell script
+  #  as it would require to restart the parent CMD process)
+  - "IF %PLATFORM% == x64 (SET \"PATH=%PYTHON%-x64;%PYTHON%-x64\\Scripts;%PATH%\") ELSE (SET \"PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%\")"
 
   # Check that we have the expected version and architecture for Python
   - "python --version"
@@ -56,7 +52,7 @@ install:
   - "pip install --upgrade tox"
 
   # Install node/npm
-  - ps: Install-Product node $env:NODEJS_VERSION
+  - ps: Install-Product node $env:NODEJS_VERSION $env:PLATFORM
   - set PATH=%APPDATA%\npm;%PATH%
   - npm -g install npm
   - npm -g install bower
