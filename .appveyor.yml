@@ -1,12 +1,12 @@
 # Keep this for future reference: https://github.com/ogrisel/python-appveyor-demo
 environment:
   global:
-    # PYTHON: "C:\\Python27" # currently 2.7.13
+    PYTHON: "C:\\Python27" # currently 2.7.13
     NODEJS_VERSION: "6.10" # the current LTS version
 
 platform:
-  - x86
   - x64
+  - x86
 
 cache:
   - "%LOCALAPPDATA%\\pip\\Cache"
@@ -40,11 +40,11 @@ install:
   # Install Python (from the official .msi of http://python.org) and pip
   # - ps: if (-not(Test-Path($env:PYTHON))) { & appveyor\install.ps1 }
 
-  # Prepend newly installed Python to the PATH of this build (this cannot be
-  # done from inside the powershell script as it would require to restart
-  # the parent CMD process).
-  # - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
-  - "ECHO %PATH%"
+  # Make sure to use the correct Python version.
+  # Prepend Python to the PATH of this build (this cannot be done from inside
+  # the powershell script as it would require to restart the parent CMD process).
+  - "echo %PLATFORM%"
+  - "IF %PLATFORM% == x64 ( SET PATH=%PYTHON%-x64;%PYTHON%-x64\\Scripts;%PATH% ) else ( SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH% )"
 
   # Check that we have the expected version and architecture for Python
   - "python --version"
