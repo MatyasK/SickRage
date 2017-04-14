@@ -12,7 +12,7 @@ env:
 before_install:
   # Workaround to stop build if commit message contains [skip travis] or [travis skip] like AppVeyor
   # Origin: https://github.com/htgoebel/pyinstaller/commit/a19a8855953ee27b855e9a6abaf9aa402bdd3358
-  - echo "$TRAVIS_COMMIT_MESSAGE" | grep -oE '\[(skip travis|travis skip)\]' | tr -d '\n' && echo " has been found, exiting." && exit 0
+  - echo "$TRAVIS_COMMIT_MESSAGE" | grep -qE  '\[(skip travis|travis skip)\]' && echo "Travis skip tag was found, exiting." && exit 0
   - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm &&
     git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
   - npm install -g grunt-cli
