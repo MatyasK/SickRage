@@ -61,7 +61,7 @@ install:
   - "pip install --upgrade tox"
 
   # Install node/npm
-  - ps: Install-Product node LTS $env:PYTHON_ARCH
+  - ps: Install-Product node LTS x$env:PYTHON_ARCH
   - set PATH=%APPDATA%\npm;%PATH%
   - npm -g install npm
   - npm -g install bower
