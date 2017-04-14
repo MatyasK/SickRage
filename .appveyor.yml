@@ -61,12 +61,12 @@ install:
   - "pip install --upgrade tox"
 
   # Install node/npm
-  - ps: Install-Product node LTS
+  - ps: Install-Product node LTS $env:PYTHON_ARCH
   - set PATH=%APPDATA%\npm;%PATH%
   - npm -g install npm
   - npm -g install bower
   - npm -g install grunt-cli
-  # - npm rebuild # need to do this when downgrading from node v7
+  - npm rebuild # need to do this when changing node version
   - npm install
   - bower install
 
