@@ -74,7 +74,7 @@ before_test:
   - echo Starting Tests
 
 test_script:
-  - grunt travis
+  - grunt ci
   - tox -v --recreate
 
 after_test:
