@@ -1,7 +1,7 @@
 # Keep this for future reference: https://github.com/ogrisel/python-appveyor-demo
 environment:
   matrix:
-    - PYTHON: "C:\\Python27" # currently 2.7.13
+    - PYTHON: "Python27" # currently 2.7.13
       NODEJS_VERSION: "6.10" # the current LTS version
 
 platform:
@@ -40,7 +40,8 @@ install:
   # Prepend Python to the PATH of this build
   # (this cannot be done from inside the powershell script
   #  as it would require to restart the parent CMD process)
-  - "IF %PLATFORM% == x64 (SET \"PATH=%PYTHON%-x64;%PYTHON%-x64\\Scripts;%PATH%\") ELSE (SET \"PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%\")"
+  - "IF %PLATFORM% == x64 ( SET PYTHON=C:\\%PYTHON%-x64 ) ELSE ( SET PYTHON=C:\\%PYTHON% )"
+  - "SET \"PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%\""
 
   # Check that we have the expected version and architecture for Python
   - "python --version"
