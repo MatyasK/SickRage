@@ -4,19 +4,18 @@ environment:
     # /E:ON and /V:ON options are not enabled in the batch script intepreter
     # See: http://stackoverflow.com/a/13751649/163740
     CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\appveyor\\run_with_env.cmd"
+    PYTHON_VERSION: "2.7.x" # currently 2.7.13
+    NODEJS_VERSION: "6.10" # the current LTS version
 
   matrix:
-    - PYTHON: "C:\\Python27"
-      PYTHON_VERSION: "2.7.x" # currently 2.7.13
-      PYTHON_ARCH: "32"
-      NODEJS_VERSION: "LTS x86"
+    - platform: x86
+      PYTHON: "C:\\Python27"
 
-    - PYTHON: "C:\\Python27-x64"
-      PYTHON_VERSION: "2.7.x" # currently 2.7.13
-      NODEJS_VERSION: "LTS x64"
+    - platform: x64
+      PYTHON: "C:\\Python27-x64"
 
 cache:
-  # - c:\python27\lib\site-packages
+  - '%LOCALAPPDATA%\\pip\\Cache'
   - "%APPDATA%\\npm"
   - .tox
   - node_modules
@@ -27,7 +26,7 @@ deploy: off
 version: "{build}"
 skip_branch_with_pr: true
 skip_tags: true
-max_jobs: 4
+# max_jobs: 4 # only works for accounts with Premium and Enterprise plans
 clone_depth: 4
 
 matrix:
@@ -67,7 +66,7 @@ install:
   - npm -g install npm
   - npm -g install bower
   - npm -g install grunt-cli
-  - npm rebuild # need to do this when changing node version
+  # - npm rebuild # need to do this when downgrading from node v7
   - npm install
   - bower install
 
